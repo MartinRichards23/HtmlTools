@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HtmlTools", "HtmlTools\HtmlTools.csproj", "{7B5B55AB-554C-4DD2-AB22-8DD81AE303B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{B1581D67-4DCA-4623-A5A8-28077B1A09A8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7B5B55AB-554C-4DD2-AB22-8DD81AE303B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B5B55AB-554C-4DD2-AB22-8DD81AE303B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B5B55AB-554C-4DD2-AB22-8DD81AE303B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B5B55AB-554C-4DD2-AB22-8DD81AE303B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1581D67-4DCA-4623-A5A8-28077B1A09A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1581D67-4DCA-4623-A5A8-28077B1A09A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1581D67-4DCA-4623-A5A8-28077B1A09A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1581D67-4DCA-4623-A5A8-28077B1A09A8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {676C397A-F918-47B7-B47B-79DF043CCB3B}
+	EndGlobalSection
+EndGlobal
