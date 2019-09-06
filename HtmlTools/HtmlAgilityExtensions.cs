@@ -6,7 +6,7 @@ using System.Text;
 
 namespace HtmlTools
 {
-    public static class Extensions
+    public static class HtmlAgilityExtensions
     {
         public static void Load(this HtmlDocument doc, byte[] data, Encoding encoding)
         {
@@ -285,5 +285,6 @@ namespace HtmlTools
         {
             return node.ParentNode.LastChild == node;
         }
+
     }
 }

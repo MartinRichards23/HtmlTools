@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace HtmlTools
+namespace HtmlTools.Converter
 {
     /// <summary>
     /// Converts html to text or nicely formatted html

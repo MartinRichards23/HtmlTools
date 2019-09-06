@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace HtmlTools
+namespace HtmlTools.Converter
 {
     public abstract class HtmlLine
     {

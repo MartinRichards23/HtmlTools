@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HtmlTools
+namespace HtmlTools.Converter
 {
     public class ConvertOptions
     {

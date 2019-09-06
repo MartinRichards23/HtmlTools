@@ -1,4 +1,5 @@
 ﻿using HtmlTools;
+using HtmlTools.Converter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,17 +67,15 @@ namespace Demo
                         text = StringTools.HtmlEncode(text);
 
                         //text = Highlighter.ApplyHighlights(text, WebMonitorSettings.KeywordColour, config.KeywordRegexes);
-                        //text = text.Replace("\r\n", "<br/>");
-                        //text = EmailTools.WrapContent(text, textLine.Node);
+                        text = text.Replace("\r\n", "<br/>");
+                        text = HtmlTools.HtmlTools.WrapContent(text, textLine.Node);
 
                         textContent.Append(text);
                     }
 
                     textContent.Append("<br style=\"clear:both; \" />");
                 }
-
-
-
+                
                 webBrowser.NavigateToString(textContent.ToString());
 
             }
