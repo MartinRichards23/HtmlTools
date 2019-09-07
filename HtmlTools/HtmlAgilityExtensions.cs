@@ -90,34 +90,6 @@ namespace HtmlTools
         }
 
         /// <summary>
-        /// Removes all script nodes
-        /// </summary>
-        public static void RemoveScriptNodes(this HtmlNode node)
-        {
-            node.RemoveNodesOfType("script");
-        }
-
-        public static void RemoveNoScriptNodes(this HtmlNode node)
-        {
-            node.RemoveNodesOfType("noscript");
-        }
-
-        /// <summary>
-        /// Removes all comment nodes
-        /// </summary>
-        public static void RemoveCommentNodes(this HtmlNode node)
-        {
-            for (int i = node.ChildNodes.Count - 1; i >= 0; i--)
-            {
-                var n = node.ChildNodes[i];
-                RemoveCommentNodes(n);
-            }
-
-            if (node.NodeType == HtmlNodeType.Comment)
-                node.Remove();
-        }
-
-        /// <summary>
         /// Gets the decoded innertext, returns null if node is null or text is null
         /// </summary>
         public static string InnerTextDecoded(this HtmlNode node)

@@ -1,7 +1,10 @@
-﻿using HtmlTools;
+﻿using HtmlAgilityPack;
+using HtmlTools;
 using HtmlTools.Converter;
+using HtmlTools.Filtering;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -31,17 +34,16 @@ namespace Demo
             {
                 string url = txtUrl.Text;
                 Uri uri = new Uri(url);
+                string originalHtml = await GetHtml(uri);
 
-                string originalHtml;
+                HtmlDocument doc = new HtmlDocument();
+                doc.LoadHtml(originalHtml);
 
-                using (WebClient client = new WebClient())
-                {
-                    originalHtml = await client.DownloadStringTaskAsync(uri);
-                }
+                HtmlFilter filter = new HtmlFilter();
+                filter.CleanHtml(doc.DocumentNode);
 
                 HtmlConverter converter = new HtmlConverter();
-
-                var lines = converter.GetLines(originalHtml, new ConvertOptions());
+                var lines = converter.GetLines(doc.DocumentNode, new ConvertOptions());
 
                 StringBuilder textContent = new StringBuilder();
 
@@ -55,7 +57,7 @@ namespace Demo
 
                         if (!string.IsNullOrWhiteSpace(src))
                         {
-                            string img = string.Format("<img src=\"{0}\" alt=\"{1}\" width=\"150\" />", src, alt);
+                            string img = $"<img src=\"{src}\" alt=\"{alt}\" width=\"150\" />";
                             textContent.AppendLine(img);
                         }
                     }
@@ -83,6 +85,20 @@ namespace Demo
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private async Task<string> GetHtml(Uri uri)
+        {
+            string html;
+
+            using (WebClient client = new WebClient())
+            {
+                html = await client.DownloadStringTaskAsync(uri);
+            }
+
+            File.WriteAllText("html.html", html);
+
+            return html;
         }
     }
 }

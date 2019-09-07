@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace HtmlTools
 {
-    class Highlighter
+    public class Highlighter
     {
         public static string ApplyHighlights(string html, string colour, IEnumerable<Regex> regexes)
         {
@@ -37,6 +38,46 @@ namespace HtmlTools
             }
 
             return html;
+        }
+
+        /// <summary>
+        /// Highlights the given nodes with a background coloured span
+        /// </summary>
+        public static void ApplyHighlights(HtmlDocument doc, string colour, IEnumerable<string> xpaths)
+        {
+            HtmlNode body = doc.GetBodyNode();
+
+            foreach (string xpath in xpaths)
+            {
+                HtmlNodeCollection nodes = body.SelectNodes(xpath);
+
+                if (nodes != null)
+                {
+                    for (int i = nodes.Count - 1; i >= 0; i--)
+                    {
+                        HtmlNode node = nodes[i];
+                        HighlightText(node, colour);
+                    }
+                }
+            }
+        }
+
+        public static void HighlightText(HtmlNode node, string colour)
+        {
+            HtmlNodeCollection nodes = node.SelectNodes(".//text()");
+
+            if (nodes != null)
+            {
+                foreach (HtmlNode textNode in nodes)
+                {
+                    if (string.IsNullOrWhiteSpace(textNode.InnerText))
+                        continue;
+
+                    string html = textNode.InnerHtml;
+
+                    textNode.InnerHtml = string.Format("<tspan style=\"background-color:{0};color:#000000\">{1}</tspan>", colour, html);
+                }
+            }
         }
     }
 }

@@ -48,16 +48,19 @@ namespace HtmlTools.Converter
             return text;
         }
 
-        /// <summary>
-        /// Extract the text from a node
-        /// </summary>
         public IList<HtmlLine> GetLines(string html, ConvertOptions options)
         {
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(html);
 
-            HtmlNode node = doc.DocumentNode;
+            return GetLines(doc.DocumentNode, options);
+        }
 
+        /// <summary>
+        /// Extract the lines of text from a node
+        /// </summary>
+        public IList<HtmlLine> GetLines(HtmlNode node, ConvertOptions options)
+        {
             HtmlLineCollection lineCollection = new HtmlLineCollection();
 
             GetLines(node, lineCollection);

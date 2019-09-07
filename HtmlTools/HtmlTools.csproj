@@ -8,4 +8,8 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.11.12" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Diffing\" />
+  </ItemGroup>
+
 </Project>
