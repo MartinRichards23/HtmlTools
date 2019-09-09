@@ -57,5 +57,21 @@ namespace HtmlTools
             input = brTagRegex.Replace(input, "\r\n");
             return input.Trim();
         }
+
+        /// <summary>
+        /// Adds the base url to the html, this means relative links will still work
+        /// </summary>
+        public static string AddBaseTag(string html, Uri uri)
+        {
+            if (!Regex.IsMatch(html, "<base", RegexOptions.IgnoreCase))
+            {
+                string baseUrl = uri.Scheme + "://" + uri.Host;
+                string baseTag = string.Format("<base href=\"{0}\" />", baseUrl);
+
+                html = baseTag + html;
+            }
+
+            return html;
+        }
     }
 }

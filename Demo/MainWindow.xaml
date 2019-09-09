@@ -6,14 +6,36 @@
         xmlns:local="clr-namespace:Demo"
         mc:Ignorable="d"
         Title="Html Tools" 
-        Height="450" Width="800">
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Height="23" Margin="6,6,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
-            <TextBlock Text="Url:" VerticalAlignment="Center" />
-            <TextBox x:Name="txtUrl" HorizontalAlignment="Left"  Text="https://www.bbc.co.uk/news" TextWrapping="NoWrap"  Width="220" Margin="6,0,0,0"/>
-            <Button x:Name="btnGo" Content="Go" Margin="6,0,0,0" Click="BtnGo_Click" />
-        </StackPanel>
+        Height="800" Width="1000">
 
-        <WebBrowser x:Name="webBrowser" Margin="0,6,0,0" />
-    </DockPanel>
+    <TabControl>
+        <TabItem>
+            <TabItem.Header>
+                Html to text
+            </TabItem.Header>
+            <DockPanel>
+                <TextBlock  DockPanel.Dock="Top" Text="A simple demo of how to get html, filter it and then convert into plain text, preserving some basic formatting and images." />
+
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Height="23" Margin="6,6,0,0">
+                    <TextBlock Text="Url:" VerticalAlignment="Center" />
+                    <TextBox x:Name="txtUrl" HorizontalAlignment="Left" VerticalContentAlignment="Center" Text="https://www.bbc.co.uk/news" TextWrapping="NoWrap"  Width="220" Margin="6,0,0,0"/>
+                    <Button x:Name="btnGo" Content="Go" Margin="6,0,0,0" Padding="4,0" Click="BtnGo_Click" />
+                </StackPanel>
+
+                <WebBrowser x:Name="webBrowser" Margin="0,6,0,0" />
+            </DockPanel>
+        </TabItem>
+
+        <TabItem>
+            <TabItem.Header>
+                Html diffing
+            </TabItem.Header>
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="A demo showing how to compare 2 html files for changes (highlighted in yellow)." />
+                <Button DockPanel.Dock="Top" x:Name="btnCompare" Content="Show diff" Click="BtnCompare_Click" HorizontalAlignment="Left"  Margin="6,6,0,0"  Padding="4"/>
+                <WebBrowser x:Name="webBrowserDiff" Margin="0,6,0,0" />
+            </DockPanel>
+        </TabItem>
+    </TabControl>
+
 </Window>
