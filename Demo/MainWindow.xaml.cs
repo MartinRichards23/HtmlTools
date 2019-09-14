@@ -28,6 +28,7 @@ namespace Demo
         public MainWindow()
         {
             InitializeComponent();
+            Utilities.HideScriptErrors(webBrowserDiff, true);
         }
 
         private async void BtnGo_Click(object sender, RoutedEventArgs e)
