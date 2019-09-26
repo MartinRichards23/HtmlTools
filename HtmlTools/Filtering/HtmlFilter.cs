@@ -14,8 +14,10 @@ namespace HtmlTools.Filtering
 
         }
 
+        #region public methods
+
         /// <summary>
-        /// Filters out any unwanted elements
+        /// Filters out elements including scripts, comments, adverts, and common types of navigation
         /// </summary>
         public void CleanHtml(HtmlNode node)
         {
@@ -30,7 +32,11 @@ namespace HtmlTools.Filtering
             node.RemoveNodesOfType("footer");
             node.RemoveNodesOfType("nav");
         }
-        
+
+        #endregion
+
+        #region Private methods
+
         /// <summary>
         /// Remove adverts
         /// </summary>
@@ -86,5 +92,7 @@ namespace HtmlTools.Filtering
                 }
             }
         }
+
+        #endregion
     }
 }

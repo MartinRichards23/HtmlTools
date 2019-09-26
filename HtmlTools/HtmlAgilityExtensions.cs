@@ -6,6 +6,9 @@ using System.Text;
 
 namespace HtmlTools
 {
+    /// <summary>
+    /// Various extentions to the HtmlAgilityPack
+    /// </summary>
     public static class HtmlAgilityExtensions
     {
         public static void Load(this HtmlDocument doc, byte[] data, Encoding encoding)

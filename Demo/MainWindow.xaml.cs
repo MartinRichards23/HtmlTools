@@ -4,22 +4,12 @@ using HtmlTools.Converter;
 using HtmlTools.Diffing;
 using HtmlTools.Filtering;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Demo
 {
@@ -37,19 +27,25 @@ namespace Demo
             {
                 string url = txtUrl.Text;
                 Uri uri = new Uri(url);
+
+                // download the html
                 string originalHtml = await GetHtml(uri);
 
+                // create the document
                 HtmlDocument doc = new HtmlDocument();
                 doc.LoadHtml(originalHtml);
 
+                // filter out parts of little interest
                 HtmlFilter filter = new HtmlFilter();
                 filter.CleanHtml(doc.DocumentNode);
 
+                // convert html into lines of text (and images)
                 HtmlConverter converter = new HtmlConverter();
                 var lines = converter.GetLines(doc.DocumentNode, new ConvertOptions());
 
-                StringBuilder textContent = new StringBuilder();
+                StringBuilder htmlContent = new StringBuilder();
 
+                // create html from lines
                 foreach (var textLine in lines)
                 {
                     // is an image line so add image here
@@ -61,7 +57,7 @@ namespace Demo
                         if (!string.IsNullOrWhiteSpace(src))
                         {
                             string img = $"<img src=\"{src}\" alt=\"{alt}\" width=\"150\" />";
-                            textContent.AppendLine(img);
+                            htmlContent.AppendLine(img);
                         }
                     }
 
@@ -71,17 +67,16 @@ namespace Demo
                         
                         text = StringTools.HtmlEncode(text);
 
-                        //text = Highlighter.ApplyHighlights(text, WebMonitorSettings.KeywordColour, config.KeywordRegexes);
                         text = text.Replace("\r\n", "<br/>");
                         text = HtmlTools.HtmlTools.WrapContent(text, textLine.Node);
 
-                        textContent.Append(text);
+                        htmlContent.Append(text);
                     }
 
-                    textContent.Append("<br style=\"clear:both; \" />");
+                    htmlContent.Append("<br style=\"clear:both; \" />");
                 }
                 
-                webBrowser.NavigateToString(textContent.ToString());
+                webBrowser.NavigateToString(htmlContent.ToString());
 
             }
             catch (Exception ex)
@@ -158,8 +153,6 @@ namespace Demo
             }
 
             html = HtmlTools.HtmlTools.AddBaseTag(html, uri);
-
-            //File.WriteAllText("html.html", html);
 
             return html;
         }

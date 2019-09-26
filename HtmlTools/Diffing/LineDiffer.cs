@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 namespace HtmlTools.Diffing
 {
     /// <summary>
-    /// Find the diff between 2 sets of lines
+    /// Find the difference between two sets of lines
     /// </summary>
     public class LineDiffer
     {
@@ -15,6 +15,11 @@ namespace HtmlTools.Diffing
 
         }
 
+        #region Public methods
+
+        /// <summary>
+        /// Returns the difference between two sets of lines
+        /// </summary>
         public DiffResult GetDiff(IList<HtmlLine> newLines, IList<HtmlLine> oldLines, bool ignoreSmallChanges)
         {
             IList<LineDiff> changes = GetDiffLines(newLines, oldLines);
@@ -33,7 +38,7 @@ namespace HtmlTools.Diffing
                 if (string.IsNullOrWhiteSpace(origText))
                     continue;
 
-                if (change.Operation == OperationType.Insert)
+                if (change.Operation == DiffType.Insert)
                 {
                     // ensure no duplication
                     if (!uniqueInserts.Add(origText))
@@ -48,7 +53,7 @@ namespace HtmlTools.Diffing
                     
                     addedDiffs.Add(change);
                 }
-                else if (change.Operation == OperationType.Delete)
+                else if (change.Operation == DiffType.Delete)
                 {
                     // ensure no duplication
                     if (!uniqueDeletes.Add(origText))
@@ -67,6 +72,10 @@ namespace HtmlTools.Diffing
             
             return new DiffResult(addedDiffs, removedDiffs);
         }
+
+        #endregion
+
+        #region Private methods
 
         private IList<LineDiff> GetDiffLines(IList<HtmlLine> newLines, IList<HtmlLine> oldLines)
         {
@@ -94,7 +103,7 @@ namespace HtmlTools.Diffing
                     continue;
                 }
 
-                LineDiff diff = new LineDiff(OperationType.Insert, line);
+                LineDiff diff = new LineDiff(DiffType.Insert, line);
                 diffs.Add(diff);
             }
 
@@ -110,11 +119,13 @@ namespace HtmlTools.Diffing
                 //if (lines1.Any(l => l.NormalisedValue == line.NormalisedValue))
                 //    continue;
 
-                LineDiff diff = new LineDiff(OperationType.Delete, line);
+                LineDiff diff = new LineDiff(DiffType.Delete, line);
                 diffs.Add(diff);
             }
 
             return diffs;
         }
+
+        #endregion
     }
 }

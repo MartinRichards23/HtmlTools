@@ -7,8 +7,14 @@ using System.Text.RegularExpressions;
 
 namespace HtmlTools
 {
+    /// <summary>
+    /// Tools for highlighting html
+    /// </summary>
     public class Highlighter
     {
+        /// <summary>
+        /// Highlight the any regex matches in the html
+        /// </summary>
         public static string ApplyHighlights(string html, string colour, IEnumerable<Regex> regexes)
         {
             ISet<string> allMatches = new HashSet<string>();
@@ -62,6 +68,9 @@ namespace HtmlTools
             }
         }
 
+        /// <summary>
+        /// Applies an element with background colour to the given node
+        /// </summary>
         public static void HighlightText(HtmlNode node, string colour)
         {
             HtmlNodeCollection nodes = node.SelectNodes(".//text()");

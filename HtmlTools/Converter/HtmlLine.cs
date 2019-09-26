@@ -2,6 +2,9 @@
 
 namespace HtmlTools.Converter
 {
+    /// <summary>
+    /// Base class for html lines
+    /// </summary>
     public abstract class HtmlLine
     {
         public HtmlLine(int lineNumber, string node, string xPath)
@@ -29,12 +32,18 @@ namespace HtmlTools.Converter
         }
     }
 
+    /// <summary>
+    /// A html line of text
+    /// </summary>
     public class HtmlTextLine : HtmlLine
     {
         public HtmlTextLine(int lineNumber, string node, string xPath) : base(lineNumber, node, xPath)
         { }
     }
 
+    /// <summary>
+    /// An html image
+    /// </summary>
     public class HtmlImageLine : HtmlLine
     {
         public HtmlImageLine(int lineNumber, string node, string xPath) : base(lineNumber, node, xPath)
@@ -54,6 +63,9 @@ namespace HtmlTools.Converter
         }
     }
 
+    /// <summary>
+    /// A collection of html lines
+    /// </summary>
     public class HtmlLineCollection
     {
         public HtmlLineCollection()
@@ -64,6 +76,9 @@ namespace HtmlTools.Converter
         public List<HtmlLine> Lines { get; private set; }
         public HtmlTextLine CurrentLine { get; private set; }
 
+        /// <summary>
+        /// Add a new image line
+        /// </summary>
         public void AddImageLine(string node, string xPath, string image, string alt)
         {
             CheckLastLine();
@@ -80,6 +95,9 @@ namespace HtmlTools.Converter
             CurrentLine = null;
         }
 
+        /// <summary>
+        /// Add a new text line
+        /// </summary>
         public void AddTextLine(string node, string xPath)
         {
             CheckLastLine();
@@ -88,6 +106,15 @@ namespace HtmlTools.Converter
             Lines.Add(textLine);
 
             CurrentLine = textLine;
+        }
+
+        /// <summary>
+        /// Adds text to the current line
+        /// </summary>
+        public void AddText(string text)
+        {
+            if (CurrentLine != null)                
+                CurrentLine.Text += text;
         }
 
         private void CheckLastLine()
@@ -99,12 +126,6 @@ namespace HtmlTools.Converter
                     Lines.Remove(CurrentLine);
                 }
             }
-        }
-
-        public void AddText(string text)
-        {
-            if (CurrentLine != null)
-                CurrentLine.Text += text;
         }
     }
 }

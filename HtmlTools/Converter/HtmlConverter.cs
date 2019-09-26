@@ -30,24 +30,11 @@ namespace HtmlTools.Converter
 
         }
 
-        #region To lines
+        #region Public methods
 
         /// <summary>
-        /// Normalise text to allow better duplicate detection
+        /// Get a collection of lines from html text
         /// </summary>
-        private string NormaliseText(string text)
-        {
-            if (text == null)
-                return null;
-
-            text = numOrPunctuationRegex.Replace(text, string.Empty);
-            text = daysMonthsRegex.Replace(text, string.Empty);
-            text = StringTools.CollapseAllWhiteSpace(text).Trim();
-            text = text.ToUpperInvariant();
-
-            return text;
-        }
-
         public IList<HtmlLine> GetLines(string html, ConvertOptions options)
         {
             HtmlDocument doc = new HtmlDocument();
@@ -57,7 +44,7 @@ namespace HtmlTools.Converter
         }
 
         /// <summary>
-        /// Extract the lines of text from a node
+        /// Get a collection of lines from a HtmlNode
         /// </summary>
         public IList<HtmlLine> GetLines(HtmlNode node, ConvertOptions options)
         {
@@ -85,6 +72,122 @@ namespace HtmlTools.Converter
             }
 
             return lines;
+        }
+
+        /// <summary>
+        /// Convert html to simplified html
+        /// </summary>
+        public string ToTidyHtml(string html)
+        {
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            return ToTidyHtml(doc.DocumentNode);
+        }
+
+        /// <summary>
+        /// Convert html to simplified html
+        /// </summary>
+        public string ToTidyHtml(HtmlNode node)
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                ToTidyHtml(node, sw);
+                sw.Flush();
+
+                string text = sw.ToString();
+
+                return text.Trim();
+            }
+        }
+
+        /// <summary>
+        /// Convert html to simplified html
+        /// </summary>
+        public void ToTidyHtml(HtmlNode node, TextWriter outText)
+        {
+            if (node.NodeType == HtmlNodeType.Document)
+            {
+                //lastWritten = node.InnerText.Trim() + "\r\n";
+                //outText.Write(lastWritten);
+
+                // Recurse children
+                RecurseToTidyHtml(node, outText);
+            }
+            else if (node.NodeType == HtmlNodeType.Comment)
+            {
+            }
+            else if (node.NodeType == HtmlNodeType.Text)
+            {
+                //string tabs = new string(indentChar, level);
+
+                // get text
+                string text = ((HtmlTextNode)node).Text;
+
+                // is this a special closing node output as text?
+                if (HtmlNode.IsOverlappedClosingElement(text))
+                    return;
+                if (string.IsNullOrWhiteSpace(text))
+                    return;
+
+                text = StringTools.CollapseAllWhiteSpace(text);
+
+                lastWritten = text;
+                //outText.Write(tabs);
+                outText.Write(lastWritten);
+                //outText.WriteLine();
+            }
+            else
+            {
+                string tabs = new string(indentChar, level);
+                if (node.HasChildNodes)
+                {
+                    lastWritten = "<" + node.Name + node.Attributes.ToHtmlString() + ">";
+                    outText.WriteLine();
+                    outText.Write(tabs);
+                    outText.Write(lastWritten);
+
+                    level++;
+
+                    // Recurse children
+                    RecurseToTidyHtml(node, outText);
+
+                    level--;
+
+                    // write closing tag
+                    lastWritten = "</" + node.Name + ">";
+                    outText.WriteLine();
+                    outText.Write(tabs);
+                    outText.Write(lastWritten);
+                }
+                else
+                {
+                    lastWritten = "<" + node.Name + node.Attributes.ToHtmlString() + " />";
+                    outText.WriteLine();
+                    outText.Write(tabs);
+                    outText.Write(lastWritten);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Private methods
+
+        /// <summary>
+        /// Normalise text to allow better duplicate detection
+        /// </summary>
+        private string NormaliseText(string text)
+        {
+            if (text == null)
+                return null;
+
+            text = numOrPunctuationRegex.Replace(text, string.Empty);
+            text = daysMonthsRegex.Replace(text, string.Empty);
+            text = StringTools.CollapseAllWhiteSpace(text).Trim();
+            text = text.ToUpperInvariant();
+
+            return text;
         }
 
         private void GetLines(HtmlNode node, HtmlLineCollection lines)
@@ -184,104 +287,7 @@ namespace HtmlTools.Converter
             }
         }
 
-        #endregion
-
-        #region To tidy html
-
-        /// <summary>
-        /// Convert html to simplified html
-        /// </summary>
-        public string ToTidyHtml(string html)
-        {
-            HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml(html);
-
-            return ToTidyHtml(doc.DocumentNode);
-        }
-
-        /// <summary>
-        /// Convert html to simplified html
-        /// </summary>
-        public string ToTidyHtml(HtmlNode node)
-        {
-            using (StringWriter sw = new StringWriter())
-            {
-                ToTidyHtml(node, sw);
-                sw.Flush();
-
-                string text = sw.ToString();
-
-                return text.Trim();
-            }
-        }
-
-        public void ToTidyHtml(HtmlNode node, TextWriter outText)
-        {
-            if (node.NodeType == HtmlNodeType.Document)
-            {
-                //lastWritten = node.InnerText.Trim() + "\r\n";
-                //outText.Write(lastWritten);
-
-                // Recurse children
-                RecurseToTidyHtml(node, outText);
-            }
-            else if (node.NodeType == HtmlNodeType.Comment)
-            {
-            }
-            else if (node.NodeType == HtmlNodeType.Text)
-            {
-                //string tabs = new string(indentChar, level);
-
-                // get text
-                string text = ((HtmlTextNode)node).Text;
-
-                // is this a special closing node output as text?
-                if (HtmlNode.IsOverlappedClosingElement(text))
-                    return;
-                if (string.IsNullOrWhiteSpace(text))
-                    return;
-
-                text = StringTools.CollapseAllWhiteSpace(text);
-
-                lastWritten = text;
-                //outText.Write(tabs);
-                outText.Write(lastWritten);
-                //outText.WriteLine();
-            }
-            else
-            {
-                string tabs = new string(indentChar, level);
-                if (node.HasChildNodes)
-                {
-                    lastWritten = "<" + node.Name + node.Attributes.ToHtmlString() + ">";
-                    outText.WriteLine();
-                    outText.Write(tabs);
-                    outText.Write(lastWritten);
-
-                    level++;
-
-                    // Recurse children
-                    RecurseToTidyHtml(node, outText);
-
-                    level--;
-
-                    // write closing tag
-                    lastWritten = "</" + node.Name + ">";
-                    outText.WriteLine();
-                    outText.Write(tabs);
-                    outText.Write(lastWritten);
-                }
-                else
-                {
-                    lastWritten = "<" + node.Name + node.Attributes.ToHtmlString() + " />";
-                    outText.WriteLine();
-                    outText.Write(tabs);
-                    outText.Write(lastWritten);
-                }
-            }
-        }
-
-        void RecurseToTidyHtml(HtmlNode node, TextWriter outText)
+        private void RecurseToTidyHtml(HtmlNode node, TextWriter outText)
         {
             if (node.HasChildNodes)
             {
@@ -290,55 +296,6 @@ namespace HtmlTools.Converter
                     ToTidyHtml(subnode, outText);
                 }
             }
-        }
-
-        #endregion
-
-        #region Statics
-
-        public static string HtmlToText(string html, ConvertOptions options)
-        {
-            HtmlConverter converter = new HtmlConverter();
-
-            IList<HtmlLine> lines = converter.GetLines(html, options);
-
-            return HtmlToText(lines, options);
-        }
-
-        /// <summary>
-        /// Extract the text from a node
-        /// </summary>
-        public static string HtmlToText(IList<HtmlLine> lines, ConvertOptions options)
-        {
-            using (StringWriter sw = new StringWriter())
-            {
-                foreach (HtmlLine line in lines)
-                {
-                    string text = line.GetFormattedText(options);
-                    sw.WriteLine(text);
-                }
-
-                sw.Flush();
-
-                return sw.ToString().Trim();
-            }
-        }
-
-        /// <summary>
-        /// Adds the base tag so paths get redirected to correct path, not relative path
-        /// </summary>
-        public static string AddBaseTag(string html, string url)
-        {
-            if (!Regex.IsMatch(html, "<base", RegexOptions.IgnoreCase))
-            {
-                UriBuilder builder = new UriBuilder(url);
-                string baseUrl = builder.Scheme + "://" + builder.Host;
-                string baseTag = string.Format("<base href=\"{0}\" />", baseUrl);
-
-                html = baseTag + html;
-            }
-
-            return html;
         }
 
         #endregion

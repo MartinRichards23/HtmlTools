@@ -13,7 +13,11 @@ namespace HtmlTools.Diffing
             Removed = removed;
         }
 
+        #region Properties
+
         public IList<LineDiff> Added { get; }
-        public IList<LineDiff> Removed { get; }         
+        public IList<LineDiff> Removed { get; }
+
+        #endregion
     }
 }

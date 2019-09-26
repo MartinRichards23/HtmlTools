@@ -4,14 +4,18 @@ namespace HtmlTools.Diffing
 {
     public class LineDiff
     {
-        public LineDiff(OperationType operation, HtmlLine line)
+        public LineDiff(DiffType operation, HtmlLine line)
         {
             Operation = operation;
             Line = line;
         }
 
-        public OperationType Operation { get; set; }
+        #region Properties
+
+        public DiffType Operation { get; set; }
         public HtmlLine Line { get; set; }
+
+        #endregion
 
         public override string ToString()
         {

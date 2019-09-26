@@ -2,37 +2,28 @@
 
 namespace HtmlTools.Diffing
 {
-    public enum OperationType
-    {
-        Delete, Insert, Equal
-    }
-
     /// <summary>
     /// Class representing one diff operation.
     /// </summary>
     public class Diff
     {
-        public Diff(OperationType operation, string text)
+        public Diff(DiffType operation, string text)
         {
             Operation = operation;
             Text = text;
             OriginalText = text;
         }
 
-        public OperationType Operation { get; set; }
+        #region Properties
+
+        public DiffType Operation { get; set; }
         public string Text { get; set; }
         public string OriginalText { get; private set; }
 
-        public override string ToString()
-        {
-            return string.Format("{0}: '{1}'", Operation, Text);
-        }
+        #endregion
 
-        /**
-         * Is this Diff equivalent to another Diff?
-         * @param d Another Diff to compare against.
-         * @return true or false.
-         */
+        #region Public methods
+
         public override bool Equals(Object obj)
         {
             // If parameter is null return false.
@@ -62,5 +53,17 @@ namespace HtmlTools.Diffing
         {
             return Text.GetHashCode() ^ Operation.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}: '{1}'", Operation, Text);
+        }
+
+        #endregion
+    }
+
+    public enum DiffType
+    {
+        Delete, Insert, Equal
     }
 }
