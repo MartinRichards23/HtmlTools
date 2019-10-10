@@ -31,8 +31,7 @@ namespace HtmlTools.Diffing
                 return false;
 
             // If parameter cannot be cast to Diff return false.
-            Diff p = obj as Diff;
-            if (p == null)
+            if (!(obj is Diff p))
                 return false;
 
             // Return true if the fields match.

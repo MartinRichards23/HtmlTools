@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
+using SystemPlus.Text;
 
 namespace HtmlTools
 {
@@ -61,7 +63,7 @@ namespace HtmlTools
 
             string val = node.GetAttributeValue(name, def);
 
-            return StringTools.HtmlDecode(val);
+            return SystemPlus.Net.HtmlTools.HtmlDecode(val);
         }
 
         /// <summary>
@@ -74,7 +76,7 @@ namespace HtmlTools
 
             string val = att.Value;
 
-            return StringTools.HtmlDecode(val);
+            return SystemPlus.Net.HtmlTools.HtmlDecode(val);
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace HtmlTools
             if (node == null)
                 return null;
 
-            return StringTools.HtmlDecode(node.InnerText);
+            return SystemPlus.Net.HtmlTools.HtmlDecode(node.InnerText);
         }
 
         /// <summary>
@@ -162,7 +164,7 @@ namespace HtmlTools
                     continue;
 
                 name = name.ToLowerInvariant();
-                content = StringTools.HtmlDecode(content);
+                content = SystemPlus.Net.HtmlTools.HtmlDecode(content);
 
                 if (!meta.ContainsKey(name))
                     meta.Add(name, content);
@@ -261,5 +263,20 @@ namespace HtmlTools
             return node.ParentNode.LastChild == node;
         }
 
+        /// <summary>
+        /// Adds the base url to the html, this means relative links will still work
+        /// </summary>
+        public static string AddBaseTag(string html, Uri uri)
+        {
+            if (!Regex.IsMatch(html, "<base", RegexOptions.IgnoreCase))
+            {
+                string baseUrl = uri.Scheme + "://" + uri.Host;
+                string baseTag = string.Format("<base href=\"{0}\" />", baseUrl);
+
+                html = baseTag + html;
+            }
+
+            return html;
+        }
     }
 }

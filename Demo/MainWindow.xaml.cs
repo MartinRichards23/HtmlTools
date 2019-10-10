@@ -10,6 +10,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using SystemPlus.Net;
 
 namespace Demo
 {
@@ -51,8 +52,8 @@ namespace Demo
                     // is an image line so add image here
                     if (textLine is HtmlImageLine imageLine)
                     {
-                        string src = NetTools.MakeAbsoluteUrl(uri.Host, imageLine.Src);
-                        string alt = StringTools.HtmlEncode(imageLine.Text);
+                        string src = UrlTools.MakeAbsoluteUrl(uri.Host, imageLine.Src);
+                        string alt = SystemPlus.Net.HtmlTools.HtmlEncode(imageLine.Text);
 
                         if (!string.IsNullOrWhiteSpace(src))
                         {
@@ -65,10 +66,10 @@ namespace Demo
                     {
                         string text = textLine.Text.Trim();
                         
-                        text = StringTools.HtmlEncode(text);
+                        text = SystemPlus.Net.HtmlTools.HtmlEncode(text);
 
                         text = text.Replace("\r\n", "<br/>");
-                        text = HtmlTools.HtmlTools.WrapContent(text, textLine.Node);
+                        text = SystemPlus.Net.HtmlTools.WrapContent(text, textLine.Node);
 
                         htmlContent.Append(text);
                     }
@@ -152,7 +153,7 @@ namespace Demo
                 html = await readStream.ReadToEndAsync();
             }
 
-            html = HtmlTools.HtmlTools.AddBaseTag(html, uri);
+            html = HtmlAgilityExtensions.AddBaseTag(html, uri);
 
             return html;
         }

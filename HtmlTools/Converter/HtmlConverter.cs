@@ -1,10 +1,10 @@
 ﻿using HtmlAgilityPack;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
+using SystemPlus.Text;
+using SystemPlus.Net;
 
 namespace HtmlTools.Converter
 {
@@ -211,7 +211,7 @@ namespace HtmlTools.Converter
                 if (HtmlNode.IsOverlappedClosingElement(text))
                     return;
 
-                text = StringTools.HtmlDecode(text);
+                text = SystemPlus.Net.HtmlTools.HtmlDecode(text);
 
                 // check the text is meaningful
                 if (!string.IsNullOrWhiteSpace(text))
